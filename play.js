@@ -1,4 +1,4 @@
-/* a test
+/* test
 console.log("tous va bien! play js");
 */
 
@@ -51,7 +51,7 @@ let questions = [
 
 
 const CORRECT_BONNUS = 10; 	// the score of a correct answer
-const MAX_QUESTION = 3; 	// the max number of the question in a quizz
+const MAX_QUESTIONS = 3; 	// the max number of the question in a quizz
 
 
 /*
@@ -63,14 +63,52 @@ startGame = () => {
 
 	//test
 	console.log(availableQuestions);
-	//getNewQuestion();
+
+	getNewQuestion();
 };
 
-/*
+
 getNewQuestion = () =>{
 
+	// Check if we have an available question in our array or if we did exceed the number maximum of the question
+	if (availableQuestions.length === 0 || questionCounter >= MAX_QUESTIONS) {
+        // Redirect to the end page
+        return window.location.assign('./end.html');
+    }
+
+	questionCounter++;
+	const index = Math.floor( Math.random() * availableQuestions.length );
+	currentQuestion = availableQuestions[index];
+	question.innerText = currentQuestion.question; // Extract and display the question from current question
+
+	choices.forEach( choice =>{
+		const number = choice.dataset['number']; // Get the data number of the choice, check play.html
+		choice.innerText = currentQuestion['choice' + number]; 
+	});
+
+	availableQuestions.splice(index,1) // Removing of the displayed question of our array 
+
+	acceptingAnswer = true;
 };
-*/
+
+
+choices.forEach((choice) => {
+    choice.addEventListener('click', (e) => {
+        if (!acceptingAnswer) return;
+
+        acceptingAnswer = false;
+        const selectedChoice = e.target;
+        const selectedAnswer = selectedChoice.dataset['number'];
+        
+        //test 
+        console.log(selectedChoice);
+        console.log('The number of the selected choice' + selectedAnswer);
+
+        getNewQuestion();
+    });
+});
+
+
 
 /*
 	Functions call 
