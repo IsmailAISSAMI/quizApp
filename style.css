@@ -48,6 +48,7 @@ h1 > span{
 	align-items: center;
 	max-width: 50rem; /* to fix at 80 rem after */
 	margin: 0 auto;
+	padding: 2rem;
 }
 
 .container > *{
