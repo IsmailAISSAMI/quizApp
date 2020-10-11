@@ -1,21 +1,24 @@
-/* test
-console.log("tous va bien! play js");
-*/
-
 const question = document.getElementById('question');
 const choices = Array.from(
 	document.getElementsByClassName('choice-text')
 	);
-
+const numQuestion = document.getElementById('head-question');
+const headScore = document.getElementById('head-score');
+ 
 let currentQuestion = {};
 let acceptingAnswer = false;
 let score = 0, questionCounter = 0;
 
 /*
+	Constants
+*/
+const CORRECT_BONNUS = 10; 	// the score of a correct answer
+const MAX_QUESTIONS = 3; 	// the max number of the question in a quizz
+
+/*
 	For not repeating the same question a second time !! 
 */
 let availableQuestions = [];
-
 
 /*
 		Just some few questions to test  
@@ -50,9 +53,6 @@ let questions = [
 ];
 
 
-const CORRECT_BONNUS = 10; 	// the score of a correct answer
-const MAX_QUESTIONS = 3; 	// the max number of the question in a quizz
-
 
 /*
 	ES6 Function
@@ -62,7 +62,7 @@ startGame = () => {
 	availableQuestions = [...questions];  //  we spread the array in availble questions 
 
 	//test
-	console.log(availableQuestions);
+	//console.log(availableQuestions);
 
 	getNewQuestion();
 };
@@ -77,6 +77,8 @@ getNewQuestion = () =>{
     }
 
 	questionCounter++;
+	numQuestion.innerText = `${questionCounter}/${MAX_QUESTIONS}`;
+	
 	const index = Math.floor( Math.random() * availableQuestions.length );
 	currentQuestion = availableQuestions[index];
 	question.innerText = currentQuestion.question; // Extract and display the question from current question
@@ -102,13 +104,35 @@ choices.forEach((choice) => {
         
         //test 
         console.log(selectedChoice);
-        console.log('The number of the selected choice' + selectedAnswer);
+        //console.log('The number of the selected choice' + selectedAnswer);
+        //
 
-        getNewQuestion();
+        const applyClass = (selectedAnswer == currentQuestion.answer) ? "correct" : "incorrect";
+        
+        if (applyClass === "correct") { 
+        	incrementScore(CORRECT_BONNUS);
+        }
+        //test
+        //console.log(applyClass);
+
+        /* 
+        	We add a class name (correct or incorrect) to choice container
+			With CSS we change the background-color to match the answer's state
+		*/
+        selectedChoice.parentElement.classList.add(applyClass);
+        
+        setTimeout(() => {
+        	selectedChoice.parentElement.classList.remove(applyClass);
+        	getNewQuestion();
+        }, 1000);
+
     });
 });
 
-
+incrementScore = num => {
+  score += num;
+  headScore.innerText = score;
+};
 
 /*
 	Functions call 
